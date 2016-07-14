@@ -43,7 +43,7 @@ local function make_keyboard(mod, mod_current_position)
 	else
 	    bottom_bar = {{text = '🔰 Admin commands', callback_data = '!mod'}}
 	end
-	table.insert(bottom_bar, {text = 'Info', callback_data = '!info_button'}) --insert the "Info" button
+	table.insert(bottom_bar, {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'}) --insert the "Info" button
 	table.insert(keyboard.inline_keyboard, bottom_bar)
 	return keyboard
 end
@@ -63,16 +63,17 @@ local function do_keybaord_credits()
 	return keyboard
 end
 
+
 local function do_keyboard_private()
     local keyboard = {}
     keyboard.inline_keyboard = {
     	{
     		{text = '👥 Add me to a werewolf group', url = 'https://telegram.me/'..bot.username..'?startgroup=new'},
     		{text = '📢 Werewolf update channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
-            {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
 	    },
 	    {
-	        {text = '📕 All the commands', callback_data = '!user'}
+	        {text = '📕 All the commands', callback_data = '!user'},
+            {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
         }
     }
     return keyboard
