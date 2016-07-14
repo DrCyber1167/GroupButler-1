@@ -3,8 +3,8 @@ local function do_keybaord_credits()
     keyboard.inline_keyboard = {
     	{
     		{text = 'Channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
-    		{text = 'GitHub', url = 'https://github.com/RememberTheAir/GroupButler'},
-    		{text = 'Rate me!', url = 'https://telegram.me/storebot?start='..bot.username},
+    		{text = 'GitHub', url = 'https://github.com/BladeZero/GroupButler'},
+    		{text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
 		}
 	}
 	return keyboard
@@ -347,10 +347,14 @@ local action = function(msg, blocks, ln)
 			api.sendReply(msg, text)
 		end
 	end
-	if blocks[1] == 'group' then
-		if msg.chat.type ~= 'private' then return end
+	if blocks[1] == 'support' then
 		if config.help_group and config.help_group ~= '' then
-			api.sendMessage(msg.chat.id, '[Click/tap here to join :)]('..config.help_group..')', true)
+			if msg.reply then 
+			 	msgToReplyTo = msg.reply.message_id
+			else 
+				msgToReplyTo = msg.message_id
+			end
+			api.sendMessage(msg.chat.id, '[Click here to get help from the support group]('..config.help_group..')', true, msgToReplyTo)
 		end
 	end
 	if blocks[1] == 'user' then
@@ -424,7 +428,7 @@ return {
 		'^/(export)(ban)$',
 		'^/(export)(save)$',
 		'^/(importban)$',
-		'^/(group)$',
+		'^/(support)$',
 		'^/(welcome) (.*)$',
 		
 		'^/(user)$',

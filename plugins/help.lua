@@ -53,8 +53,8 @@ local function do_keybaord_credits()
     keyboard.inline_keyboard = {
     	{
     		{text = 'Channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
-    		{text = 'GitHub', url = 'https://github.com/RememberTheAir/GroupButler'},
-    		{text = 'Rate me!', url = 'https://telegram.me/storebot?start='..bot.username},
+    		{text = 'GitHub', url = 'https://github.com/BladeZero/GroupButler'},
+    		{text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
 		},
 		{
 		    {text = '🔙', callback_data = '!user'}
@@ -67,8 +67,9 @@ local function do_keyboard_private()
     local keyboard = {}
     keyboard.inline_keyboard = {
     	{
-    		{text = '👥 Add me to a group', url = 'https://telegram.me/'..bot.username..'?startgroup=new'},
-    		{text = '📢 Bot channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
+    		{text = '👥 Add me to a werewolf group', url = 'https://telegram.me/'..bot.username..'?startgroup=new'},
+    		{text = '📢 Werewolf update channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
+            {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
 	    },
 	    {
 	        {text = '📕 All the commands', callback_data = '!user'}
