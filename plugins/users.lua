@@ -42,9 +42,9 @@ end
 local function get_ban_info(user_id, chat_id, ln)
 	local hash = 'ban:'..user_id
 	local ban_info = db:hgetall(hash)
-	if not next(ban_info) then
-		return lang[ln].getban.nothing
-	else
+	--if not next(ban_info) then
+	--	return lang[ln].getban.nothing
+	--else
 		local ban_index = {
 			['kick'] = lang[ln].getban.kick,
 			['ban'] = lang[ln].getban.ban,
@@ -59,15 +59,15 @@ local function get_ban_info(user_id, chat_id, ln)
 		for type,n in pairs(ban_info) do
 			text = text..'`'..ban_index[type]..'`'..'*'..n..'*\n'
 		end
-		if text == '' then
-			return lang[ln].getban.nothing
-		else
+		--if text == '' then
+		--	return lang[ln].getban.nothing
+		--else
 			local warns = (db:hget('chat:'..chat_id..':warns', user_id)) or 0
 			local media_warns = (db:hget('chat:'..chat_id..':mediawarn', user_id)) or 0
 			text = text..'\n`Warns`: '..warns..'\n`Media warns`: '..media_warns
 			return text
-		end
-	end
+		--end
+	--end
 end
 
 local function do_keyboard_userinfo(user_id, ln)
