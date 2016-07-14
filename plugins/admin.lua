@@ -63,6 +63,7 @@ local triggers2 = {
 	'^/a(remgroup) (true) (-%d+)$',
 }
 
+
 local logtxt = ''
 local failed = 0
 

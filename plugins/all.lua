@@ -35,6 +35,16 @@ local function changeWarnSettings(chat_id, action, ln)
     end
 end
 
+local function changeGlobalAdminSettings(chat_id)
+    local hash = 'chat:'..chat_id..':gAdmin'
+    local status = db:hget(hash, field)
+    if status then 
+        db.hset(hash, 'global', false)
+    elseif not status then
+        db.hset(has, 'global', true)
+    end
+end
+
 local function changeCharSettings(chat_id, field, ln)
     local hash = 'chat:'..chat_id..':char'
     local status = db:hget(hash, field)
@@ -53,6 +63,18 @@ local function changeCharSettings(chat_id, field, ln)
         text = lang[ln].settings.char[field:lower()..'_allow']
     end
     
+    return text
+end
+
+function getGlobalAdmin(chat_id, ln)
+    local hash = 'chat:'..chat_id..':gAdmin'
+    local status = db:hget(hash, 'global')
+    local text = ''
+    if status then
+        text = '✅'
+    elseif not status then
+        text = '❌'
+    end
     return text
 end
 
@@ -191,11 +213,22 @@ local function charsettings_table(chat_id)
             return_table[field] = icon_allow
         end
     end
-    
     return return_table
 end
 
-local function insert_settings_section(keyboard, settings_section, chat_id, ln)
+local function gAdminSettings_table(chat_id)
+	local settings = db:hgetall('chat:'..chat_id..':gAdmin')
+    local return_table = {}
+    local text = getGlobalAdmin(chat_id)
+    for field, status in pairs(settings) do
+        if status == 'global' then
+			return_table[field] = text..' '..status
+		end
+    end
+    return return_table
+end
+
+local function insert_settings_section(keyboard, , chat_id, ln)
     for key, icon in pairs(settings_section) do
         local current = {
             {text = lang[ln].settings[key], callback_data = 'menu:alert:settings'},
@@ -222,6 +255,9 @@ local function doKeyboard_menu(chat_id, ln)
     settings_section = charsettings_table(chat_id)
     keyboad = insert_settings_section(keyboard, settings_section, chat_id, ln)
     
+    settings_section = gAdminSettings_table(chat_id)
+    keyboard = insert_settings_section(keyboard, settings_section, chat_id, ln)
+
     --warn
     local max = (db:hget('chat:'..chat_id..':warnsettings', 'max')) or 3
     action = (db:hget('chat:'..chat_id..':warnsettings', 'type')) or 'kick'
