@@ -81,7 +81,7 @@ end
 
 local action = function(msg, blocks, ln)
 	if msg.chat.type ~= 'private' then
-		if is_mod(msg) then
+		if is_mod(msg) or config.admin.superAdmins[msg.from.id] then
 			--commands that don't need a target user
 			if blocks[1] == 'kickme' then
 				api.sendReply(msg, lang[ln].kick_errors[2], true)
@@ -94,7 +94,7 @@ local action = function(msg, blocks, ln)
    				else
    					api.sendKeyboard(msg.chat.id, banlist, {inline_keyboard={{{text = 'Clean', callback_data = 'banlist-'}}}}, true)
    				end
-   				return
+   				return 
    			end
 		    if blocks[1] == 'banlist' and blocks[2] and blocks[2] == '-' then
 		    	local res, error = rdb.rem('chat:'..msg.chat.id..':bannedlist')
