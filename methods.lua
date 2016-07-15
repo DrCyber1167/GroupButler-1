@@ -164,20 +164,50 @@ local function banUser(chat_id, user_id, is_normal_group, ln)--no_msg: kick with
 end
 
 local function kickUser(chat_id, user_id, ln)-- no_msg: don't send the error message if kick is failed. If no_msg is false, it will return the motivation of the fail
-	
+	print('kick run')
 	local res, code = api.kickChatMember(chat_id, user_id) --try to kick
-	
+	--print('waiting for ban result check')
 	if res then --if the user has been kicked, then...
+		print('user has been banned, database to follow')
 	    db:hincrby('bot:general', 'kick', 1) --genreal: save how many kicks
+		--print('database addition went fine, begining unbanning')
 		--unban
-		api.unbanChatMember(chat_id, user_id)
-		api.unbanChatMember(chat_id, user_id)
-		api.unbanChatMember(chat_id, user_id)
+		local check = api.getChatMember(chat_id, user_id)
+		local status = check.result.status -- check if user is banned 
+		--print('status has been check')
+		local count = 0
+		if count < 20 then
+			print('inside api limit prevention')
+				while status == 'kicked' do
+					print('inside while loop')
+					api.unbanChatMember(chat_id, user_id)
+					check = api.getChatMember(chat_id, user_id)
+					status = check.result.status
+					count = count + 1
+					print('unban try has been done')
+				end
+			if count == 0 then
+				print('had to go past cause telegram is buggy af')
+				api.unbanChatMember(chat_id, user_id)
+				while status == 'kicked' do
+					print('inside while loop')
+					api.unbanChatMember(chat_id, user_id)
+					check = api.getChatMember(chat_id, user_id)
+					status = check.result.status
+					count = count + 1
+					print('unban try has been done')
+				end
+			end
+			print('out of the while')
+		end
+		print('It took: '..count..' times to kick')
 		return res
 	else
+		print('inside else statment because result failed')
 		local motivation = api.code2text(code, ln)
 		return res, motivation
 	end
+	print('kicked finished')
 end
 
 local function unbanUser(chat_id, user_id, is_normal_group)

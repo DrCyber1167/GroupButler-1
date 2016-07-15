@@ -220,26 +220,29 @@ local action = function(msg, blocks, ln)
     		end
    			if blocks[1] == 'unban' then
    				local status = cross.getUserStatus(chat_id, user_id)
-   				if not(status == 'kicked') and not(msg.chat.type == 'group') then
-   					api.sendReply(msg, lang[ln].banhammer.not_banned, true)
-   					return
-   				end
-   				local res = api.unbanUser(chat_id, user_id, is_normal_group)
-   				local text
-   				if not res and msg.chat.type == 'group' then
-   					--api.sendReply(msg, lang[ln].banhammer.not_banned, true)
-   					text = lang[ln].banhammer.not_banned
-   				else
-   					cross.remBanList(msg.chat.id, user_id)
-   					text = lang[ln].banhammer.unbanned
-   					--api.sendReply(msg, lang[ln].banhammer.unbanned, true)
-   				end
-   				if not msg.cb then
-   					api.sendReply(msg, text, true)
-   				else
-   					api.editMessageText(msg.chat.id, msg.message_id, text..'\n`['..user_id..']\n(Admin: '..msg.from.first_name:mEscape()..')`', false, true)
-   				end
-   			end
+				if not config.admin.GlobalBanList[user_id] then
+					local res = api.unbanUser(chat_id, user_id, is_normal_group)
+					--if not(status == 'kicked') and not(msg.chat.type == 'group') then
+						--api.sendReply(msg, lang[ln].banhammer.not_banned, true)
+						--return
+					--end
+					
+					local text
+					if not res and msg.chat.type == 'group' then
+						--api.sendReply(msg, lang[ln].banhammer.not_banned, true)
+						text = lang[ln].banhammer.not_banned
+					else
+						cross.remBanList(msg.chat.id, user_id)
+						text = lang[ln].banhammer.unbanned
+						--api.sendReply(msg, lang[ln].banhammer.unbanned, true)
+					end
+					if not msg.cb then
+						api.sendReply(msg, text, true)
+					else
+						api.editMessageText(msg.chat.id, msg.message_id, text..'\n`['..user_id..']\n(Admin: '..msg.from.first_name:mEscape()..')`', false, true)
+					end
+				end
+			end
 		else
 			if blocks[1] == 'kickme' then
 				api.kickUser(msg.chat.id, msg.from.id, ln)

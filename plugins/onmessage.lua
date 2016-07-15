@@ -169,7 +169,34 @@ pre_process = function(msg, ln)
     if is_blocked(msg.from.id) then --ignore blocked users
         return msg, true --if an user is blocked, don't go through plugins
     end
-    
+	
+	if msg.chat.type ~= "private" then
+		local mafiaMessage = 'mafiagangsbot'
+		local inMessage = msg.text
+		local user = msg.from.id
+		--print(inMessage)
+		if string.match(inMessage, mafiaMessage) then
+			--print("in if")
+			--api.kickUser(msg.chat.id, msg.from.id, ln)
+			api.banUser(msg.chat.id, msg.from.id, msg.normal_group, ln)
+			cross.addBanList(msg.chat.id, msg.from.id, msg.from.username, 'Mafia Spam')
+			print(msg.from.id..', '..msg.from.username..' banned for mafia spam in '..msg.chat.id)
+		end
+		
+		if config.admin.GlobalBanList[user] then
+			api.banUser(msg.chat.id, msg.from.id, msg.normal_group, ln)
+			cross.addBanList(msg.chat.id, msg.from.id, msg.from.username, 'GlobalBan for Child Porn')
+			api.sendMessage(msg.chat.id, msg.from.first_name..' has been automatically banned as he sent child porn to one of the groups this bot is in or heavily stalked someone in one of the groups this bot is in. To appeal this ban please join @werewolfsupport')
+			print(msg.from.id..', '..msg.from.username..' Global banned '..msg.chat.id)
+		end
+		
+		--print("by return")
+		local path = "./logs/MessageLog.txt"
+		file = io.open(path, "w")
+		local logText = clr.reset..clr.blue..'['..os.date('%X')..']'..clr.red..msg.from.first_name..', '..msg.from.id..' said: '..msg.text..' in '..msg.chat.title
+		file:write(logText)
+		file:close()
+	end
     return msg
 end
 
