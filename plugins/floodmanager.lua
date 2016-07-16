@@ -51,7 +51,7 @@ local function do_keyboard_flood(chat_id, ln)
         }
         table.insert(keyboard.inline_keyboard, line)
     end
-    
+    table.insert (keyboard.inline_keyboard, {{text = "Done", callback_data = "close"}})
     return keyboard
 end
 
