@@ -142,7 +142,8 @@ local function doKeyboard_dashboard(chat_id, ln)
 	    {
 	   	    {text = lang[ln].all.dashboard.flood, callback_data = 'dashboard:flood:'..chat_id},
 	   	    {text = lang[ln].all.dashboard.media, callback_data = 'dashboard:media:'..chat_id}
-	    },
+        },
+        { {text = "Done", callback_data = "close"} }
     }
     
     return keyboard
@@ -232,7 +233,7 @@ local function doKeyboard_menu(chat_id, ln)
     }
     table.insert(keyboard.inline_keyboard, {{text = 'Warns 👇🏼', callback_data = 'menu:alert:warns:'}})
     table.insert(keyboard.inline_keyboard, warn)
-    
+    table.insert(keyboard.inline_keyboard, { {text = "Done", callback_data = "close"} })
     return keyboard
 end
 
@@ -272,13 +273,15 @@ local action = function(msg, blocks, ln)
         end
         if msg.cb then
             local request = blocks[2]
-            local text
+            local toast , text = 'ℹ️ Group ► '
             keyboard = doKeyboard_dashboard(chat_id, ln)
             if request == 'settings' then
                 text = cross.getSettings(chat_id, ln)
+                toast = toast .. "Settings"
             end
             if request == 'rules' then
                 text = cross.getRules(chat_id, ln)
+                toast = toast .. "Rules"
             end
             if request == 'about' then
                 text = cross.getAbout(chat_id, ln)
@@ -290,18 +293,23 @@ local action = function(msg, blocks, ln)
                 else
                     text = make_text(lang[ln].mod.modlist, creator, admins)
                 end
+                toast = toast .. "Admins"
             end
             if request == 'extra' then
                 text = cross.getExtraList(chat_id, ln)
+                toast = toast .. "Extra commands"
             end
             if request == 'welcome' then
                 text = getWelcomeMessage(chat_id, ln)
+                toast = toast .. "Welcome message"
             end
             if request == 'flood' then
                 text = getFloodSettings_text(chat_id, ln)
+                toast = toast .. "Flood settings"
             end
             if request == 'media' then
                 text = lang[ln].mediasettings.settings_header
+                toast = toast .. "Media settings"
                 for i, media in pairs(config.media_list) do
                     local status = (db:hget('chat:'..chat_id..':media', media)) or 'allowed'
                     if status == 'allowed' then
@@ -313,7 +321,7 @@ local action = function(msg, blocks, ln)
                 end
             end
             api.editMessageText(msg.chat.id, msg_id, text, keyboard, true)
-            api.answerCallbackQuery(msg.cb_id, 'ℹ️ Group ► '..request)
+            api.answerCallbackQuery(msg.cb_id, toast)
             return
         end
     end

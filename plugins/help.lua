@@ -45,7 +45,7 @@ local function make_keyboard(mod, mod_current_position)
 	end
     table.insert (bottom_bar, { text = 'Get Support', url = 'https://telegram.me/werewolfsupport' }) --insert the "Info" button
     table.insert (keyboard.inline_keyboard, bottom_bar)
-    table.insert (keyboard.inline_keyboard, { { text = '🔙 General Help', callback_data = '!home' }}) --insert the "Back" button on another line
+    table.insert (keyboard.inline_keyboard, {{text = "Done", callback_data = "close"}})
     return keyboard
 end
 
@@ -60,6 +60,9 @@ local function do_keyboard_private()
 	    {
 	        {text = '📕 All the commands', callback_data = '!user'},
             {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
+        },
+        {
+            {text = "Done", callback_data = "close"}
         }
     }
     return keyboard
