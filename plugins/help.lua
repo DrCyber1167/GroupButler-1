@@ -49,7 +49,6 @@ local function make_keyboard(mod, mod_current_position)
     return keyboard
 end
 
-
 local function do_keyboard_private()
     local keyboard = {}
     keyboard.inline_keyboard = {
@@ -78,7 +77,20 @@ local function do_keyboard_startme()
     return keyboard
 end
 
-local action = function(msg, blocks, ln)
+local function do_keyboard_role()
+    local keyboard_role = {
+        {
+            { text = '🔰 User commands', callback_data = '!user' },
+            { text = '🔰 Admin commands', callback_data = '!mod' }
+        },
+        {
+            { text = 'Get Support', url = 'https://telegram.me/werewolfsupport' }
+        }
+    }
+    return keyboard_role
+end
+
+    local action = function(msg, blocks, ln)
     -- save stats
     if blocks[1] == 'start' then
         db:hset('bot:users', msg.from.id, 'xx')
@@ -90,7 +102,6 @@ local action = function(msg, blocks, ln)
         end
         return
     end
-    local keyboard = make_keyboard()
     if blocks[1] == 'help' then
         if msg.chat.type == 'private' then
             local message = make_text(lang[ln].help.private, msg.from.first_name:mEscape())
@@ -98,7 +109,7 @@ local action = function(msg, blocks, ln)
             api.sendKeyboard(msg.from.id, message, keyboard, true)
             return
         end
-        local res = api.sendKeyboard(msg.from.id, 'Choose the *role* to see the available commands:', keyboard, true)
+        local res = api.sendKeyboard(msg.from.id, 'Choose the *role* to see the available commands:', do_keyboard_role(), true)
         if res then
             api.sendMessage(msg.chat.id, lang[ln].help.group_success, true)
         else
