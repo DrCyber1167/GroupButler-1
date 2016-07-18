@@ -3,15 +3,30 @@ return {
 	version = '3.1', -- /aupdate for v3.1
 	testing_mode = false,
 	admin = {
-		owner = 23646077,
+		owner = '',
 		admins = {
-			[141956218] = true,
-			[23646077] = true
+
+    		},
+		superAdmins = {
+
+		},
+		
+		wwGlobalAdmins = {
+
+		},
+		
+		GlobalBanList = {
+			[226703696] = true, --Wese: Impersonation / Stalking
+			[104427390] = true, --Lixie: Stalking
+			[238377175] = true, --Cropa-Senpai: CP
+			[194979294] = true, --Rocco Semental: CP
+			[115439685] = true, --Cosme Florencia: CP
+
 		}
 	},
-	log_chat = -1001057801239,
-	channel = '@groupbutler_ch', --channel username with the '@'
-	help_group = 'https://telegram.me/joinchat/CHYUej9jFxFN12MQqrLnUg', --group link, not username!
+	log_chat = -1001056443835,
+	channel = '@werewolfdev',
+	help_group = 'https://telegram.me/werewolfsupport', --group link, not username!
 	languages = 'languages.lua',
 	plugins = {
 		'onmessage.lua', --THIS HAVE TO BE THE FIRST: IF AN USER IS SPAMMING/IS BLOCKED, THE BOT WON'T GO THROUGH PLUGINS
