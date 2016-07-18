@@ -113,6 +113,15 @@ local action = function(msg, blocks, ln)
             api.sendKeyboard(msg.from.id, message, keyboard, true)
             return
         end
+        keyboard = {
+            {
+                { text = '🔰 User commands', callback_data = '!user' },
+                { text = '🔰 Admin commands', callback_data = '!mod' },
+            },
+            {
+                { text = "Done", callback_data = "close" }
+            },
+        }
         local res = api.sendKeyboard(msg.from.id, 'Choose the *role* to see the available commands:', keyboard, true)
         if res then
             api.sendMessage(msg.chat.id, lang[ln].help.group_success, true)
