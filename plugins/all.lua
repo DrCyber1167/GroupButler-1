@@ -285,6 +285,7 @@ local action = function(msg, blocks, ln)
             end
             if request == 'about' then
                 text = cross.getAbout(chat_id, ln)
+				toast = toast .. "Description"
             end
             if request == 'modlist' then
                 local creator, admins = cross.getModlist(chat_id)
