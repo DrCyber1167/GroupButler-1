@@ -72,7 +72,7 @@ pre_process = function(msg, ln)
         	end
             
             if msg.cb then
-                api.answerCallbackQuery(msg.cb_id, '‼️ Please don\'t abuse the keyboard, requests will be ignored')
+                api.answerCallbackQuery(msg.cb_id, "‼️ Please don't abuse the keyboard, requests will be ignored")
             end
             return msg, true --if an user is spamming, don't go through plugins
         end
@@ -197,6 +197,10 @@ pre_process = function(msg, ln)
 		file:write(logText)
 		file:close()
 	end
+    if msg.chat.type == "private" and msg.cb and msg.text == "###cb:close" then
+        api.editMessageText(msg.chat.id, msg.message_id, "Done.")
+        api.answerCallbackQuery(msg.cb_id, "Thank you, have a good day :)")
+    end
     return msg
 end
 

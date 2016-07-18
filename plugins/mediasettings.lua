@@ -32,6 +32,7 @@ local function doKeyboard_media(chat_id)
         {text = '➕', callback_data = 'mediawarn:raise:'..chat_id},
     }
     table.insert(keyboard.inline_keyboard, warn)
+    table.insert(keyboard.inline_keyboard, { {text = "Done", callback_data = 'close'} })
     return keyboard
 end
 

@@ -4,9 +4,12 @@ local function do_keybaord_credits()
     	{
     		{text = 'Channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
     		{text = 'GitHub', url = 'https://github.com/BladeZero/GroupButler'},
-    		{text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
-		}
-	}
+            {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
+        },
+        {
+            { text = "Done", callback_data = "close" }
+        }
+    }
 	return keyboard
 end
 
@@ -44,16 +47,6 @@ local action = function(msg, blocks, ln)
 			end
 		end
 	end
-	if blocks[1] == 'c' then
-		if msg.chat.type ~= 'private' then
-        	return
-    	end
-    	local text = 'This command *has been replaced!*\n\nNow you can start your message with an ! to communicate with the bot owner. Example:\n_!hello, how are you?_'
-    	if config.help_group and config.help_group ~= '' then
-    		text = text..'\n\nYou can also join the discussion group to ask your question/report a bug. You can join with [this link]('..config.help_group..')'
-    	end
-    	api.sendMessage(msg.chat.id, text, true)
-    end
     if blocks[1] == '!' then
     	if msg.chat.type ~= 'private' then
         	return

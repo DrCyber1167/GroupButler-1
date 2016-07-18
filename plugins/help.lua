@@ -43,26 +43,11 @@ local function make_keyboard(mod, mod_current_position)
 	else
 	    bottom_bar = {{text = '🔰 Admin commands', callback_data = '!mod'}}
 	end
-	table.insert(bottom_bar, {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'}) --insert the "Info" button
-	table.insert(keyboard.inline_keyboard, bottom_bar)
-	return keyboard
+    table.insert (bottom_bar, { text = 'Get Support', url = 'https://telegram.me/werewolfsupport' }) --insert the "Info" button
+    table.insert (keyboard.inline_keyboard, bottom_bar)
+    table.insert (keyboard.inline_keyboard, {{text = "Done", callback_data = "close"}})
+    return keyboard
 end
-
-local function do_keybaord_credits()
-	local keyboard = {}
-    keyboard.inline_keyboard = {
-    	{
-    		{text = 'Channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
-    		{text = 'GitHub', url = 'https://github.com/BladeZero/GroupButler'},
-    		{text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
-		},
-		{
-		    {text = '🔙', callback_data = '!user'}
-        }
-	}
-	return keyboard
-end
-
 
 local function do_keyboard_private()
     local keyboard = {}
@@ -74,6 +59,9 @@ local function do_keyboard_private()
 	    {
 	        {text = '📕 All the commands', callback_data = '!user'},
             {text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
+        },
+        {
+            {text = "Done", callback_data = "close"}
         }
     }
     return keyboard
@@ -89,7 +77,20 @@ local function do_keyboard_startme()
     return keyboard
 end
 
-local action = function(msg, blocks, ln)
+local function do_keyboard_role()
+    local keyboard_role = {
+        {
+            { text = '🔰 User commands', callback_data = '!user' },
+            { text = '🔰 Admin commands', callback_data = '!mod' }
+        },
+        {
+            { text = 'Get Support', url = 'https://telegram.me/werewolfsupport' }
+        }
+    }
+    return keyboard_role
+end
+
+    local action = function(msg, blocks, ln)
     -- save stats
     if blocks[1] == 'start' then
         db:hset('bot:users', msg.from.id, 'xx')
@@ -101,7 +102,6 @@ local action = function(msg, blocks, ln)
         end
         return
     end
-    local keyboard = make_keyboard()
     if blocks[1] == 'help' then
         if msg.chat.type == 'private' then
             local message = make_text(lang[ln].help.private, msg.from.first_name:mEscape())
@@ -109,7 +109,7 @@ local action = function(msg, blocks, ln)
             api.sendKeyboard(msg.from.id, message, keyboard, true)
             return
         end
-        local res = api.sendKeyboard(msg.from.id, 'Choose the *role* to see the available commands:', keyboard, true)
+        local res = api.sendKeyboard(msg.from.id, 'Choose the *role* to see the available commands:', do_keyboard_role(), true)
         if res then
             api.sendMessage(msg.chat.id, lang[ln].help.group_success, true)
         else
@@ -119,11 +119,6 @@ local action = function(msg, blocks, ln)
     if msg.cb then
         local query = blocks[1]
         local text
-        if query == 'info_button' then
-            keyboard = do_keybaord_credits()
-		    api.editMessageText(msg.chat.id, msg.message_id, lang[ln].credits, keyboard, true)
-		    return
-		end
         local with_mods_lines = true
         if query == 'user' then
             text = lang[ln].help.all
@@ -154,7 +149,12 @@ local action = function(msg, blocks, ln)
         elseif query == 'settings' then
         	text = lang[ln].help.mods[query]
         end
-        keyboard = make_keyboard(with_mods_lines, query)
+        if query == 'home' then
+            text = make_text(lang[ln].help.private, msg.from.first_name:mEscape())
+            keyboard = do_keyboard_private()
+        else
+            keyboard = make_keyboard(with_mods_lines, query)
+        end
         local res, code = api.editMessageText(msg.chat.id, msg.message_id, text, keyboard, true)
         if not res and code and code == 111 then
             api.answerCallbackQuery(msg.cb_id, '❗️ Already on this tab')
@@ -183,6 +183,7 @@ return {
 	    '^###cb:!(extra)',
 	    '^###cb:!(warns)',
 	    '^###cb:!(char)',
-	    '^###cb:!(settings)',
+        '^###cb:!(settings)',
+        '^###cb:!(home)',
     }
 }
