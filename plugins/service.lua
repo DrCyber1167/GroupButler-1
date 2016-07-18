@@ -84,12 +84,14 @@ local action = function(msg, blocks, ln)
 	
 	--if someone join the chat
 	if blocks[1] == 'added' then
-		
+
 		if msg.chat.type == 'group' and is_banned(msg.chat.id, msg.added.id) then
 			api.kickChatMember(msg.chat.id, msg.added.id)
 			return
 		end
+
 		
+
 		--[[if msg.chat.type == 'supergroup' and db:sismember('chat:'..msg.chat.id..':prevban') then
 			if msg.adder and is_mod(msg) then --if the user is added by a moderator, remove the added user from the prevbans
 				db:srem('chat:'..msg.chat.id..':prevban', msg.added.id)
@@ -106,6 +108,21 @@ local action = function(msg, blocks, ln)
 		if msg.added.username then
 			local username = msg.added.username:lower()
 			if username:find('bot', -3) then return end
+		end
+		
+		if config.admin.wwGlobalAdmins[msg.from.id] then 
+			api.sendMessage(msg.chat.id, 'Welcome, Werewolf senior admin.')
+			return
+		end
+		
+		if msg.from.id == 125311351 then
+			api.sendMessage(msg.chat.id, 'Welcome Supreme Leader Daniel.')
+			return 
+		end
+		
+		if msg.from.id == 129046388 then 
+			api.sendMessage(msg.chat.id, 'Welcome greatest programer to live, Para')
+			return 
 		end
 		
 		local text = get_welcome(msg, ln)

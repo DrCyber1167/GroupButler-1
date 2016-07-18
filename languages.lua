@@ -972,7 +972,7 @@
                         .."When Rtl is not allowed (🚫), everyone that writes this character (or that has it in his name) will be kicked.",
                 links = "*Moderators: links*\n\n"
                         ..'`/setlink [link|\'no\']` : set the group link, so it can be re-called by other admins, or unset it\n'
-                        .."`/link` = get the group link, if already setted by the owner\n"
+                        .."`/link` = get the group link, if already set by the owner\n"
                         .."\n*Note*: the bot can recognize valid group links/poll links. If a link is not valid, you won't receive a reply.",
                 lang = "*Moderators: group language*\n\n"
                         .."`/lang` = choose the group language (can be changed in private too).\n"
@@ -1091,7 +1091,7 @@
             },
             welcome = {
                 no_input = 'Bienvenida y...?',
-                media_setted = 'New media setted as welcome message: ',
+                media_setted = 'New media set as welcome message: ',
                 reply_media = 'Reply to a `sticker` or a `gif` to set them as *welcome message*',
                 a = 'Nuevos ajustes para el mensaje de bienvenida:\nReglas\n*Descripcion*\nModeradores',
                 r = 'Nuevos ajustes para el mensaje de bienvenida:\n*Reglas*\nDescripcion\nModeradores',
@@ -1102,9 +1102,9 @@
                 ram = 'Nuevos ajustes para el mensaje de bienvenida:\n*Reglas*\n*Descripcion*\n*Moderadores*',
                 no = 'Nuevos ajustes para el mensaje de bienvenida:\nReglas\nDescripcion\nModeradores',
                 wrong_input = 'Argumento no disponible.\nUsa _/welcome [no|r|a|ra|ar]_',
-                custom = '*Custom welcome message* setted!\n\n&&&1',
+                custom = '*Custom welcome message* set!\n\n&&&1',
                 custom_setted = '*Custom welcome message saved!*',
-                wrong_markdown = '_Not setted_ : I can\'t send you back this message, probably the markdown is *wrong*.\nPlease check the text sent',
+                wrong_markdown = '_Not set_ : I can\'t send you back this message, probably the markdown is *wrong*.\nPlease check the text sent',
             },
             resume = {
                 header = 'Ajustes actuales de *&&&1*:\n\n*Idioma*: `&&&2`\n',
@@ -1522,7 +1522,7 @@
             },
             welcome = {
                 no_input = 'Bem-vindo(a) e...?',
-                media_setted = 'New media setted as welcome message: ',
+                media_setted = 'New media set as welcome message: ',
                 reply_media = 'Reply to a `sticker` or a `gif` to set them as *welcome message*',
                 a = 'Nova configuração para a mensagem de boas-vindas:\nRegras\n*Descrição*\nLista de moderadores(as)',
                 r = 'Nova configuração para a mensagem de boas-vindas:\n*Regras*\nDescrição\nLista de moderadores(as)',
@@ -1535,7 +1535,7 @@
                 wrong_input = 'Argumento inválido.\nUse _/welcome [no|r|a|ra|ar]_',
                 custom = '*Custom welcome message* setted!\n\n&&&1',
                 custom_setted = '*Custom welcome message saved!*',
-                wrong_markdown = '_Not setted_ : I can\'t send you back this message, probably the markdown is *wrong*.\nPlease check the text sent',
+                wrong_markdown = '_Not set_ : I can\'t send you back this message, probably the markdown is *wrong*.\nPlease check the text sent',
             },
             resume = {
                 header = 'Atuais configurações para *&&&1*:\n\n*Idioma*: `&&&2`\n',
