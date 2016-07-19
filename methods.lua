@@ -189,6 +189,8 @@ local function kickUser(chat_id, user_id, ln)-- no_msg: don't send the error mes
 			if count == 0 then
 				print('had to go past cause telegram is buggy af')
 				api.unbanChatMember(chat_id, user_id)
+				check = api.getChatMember(chat_id, user_id)
+				status = check.result.status
 				while status == 'kicked' do
 					print('inside while loop')
 					api.unbanChatMember(chat_id, user_id)
