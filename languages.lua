@@ -87,7 +87,6 @@
                 media = "*Admins: media settings*\n\n"
                         .."`/media` = receive in PM an inline keyboard to change all the media settings.\n"
                         .."`/warnmax media [number]` = set the max number of warnings before be kicked/banned for have sent a forbidden media.\n"
-                        .."`/nowarns (by reply)` = reset the number of warnings for the users (*NOTE: both regular warnings and media warnings*).\n"
                         .."`/media list` = show the current settings for all the media.\n"
                         .."\n*List of supported media*: _image, audio, video, sticker, gif, voice, contact, file, link_\n",
                 welcome = "*Admins: welcome settings*\n\n"
@@ -119,8 +118,8 @@
                         .."`/menu` = you will receive in private the menu keyboard.\n"
                         .."Here you will find two particular options: _Arab and RTL_.\n"
                         .."\n*Arab*: when Arab it's not allowed (🚫), everyone who will write an arab character will be kicked from the group.\n"
-                        .."*Rtl*: it stands for 'Righ To Left' character, and it's the responsible of the weird service messages that are written in the opposite sense.\n"
-                        .."When Rtl is not allowed (🚫), everyone that writes this character (or that has it in his name) will be kicked.",
+                        .."*RTL*: it stands for 'Right To Left' character, and it's the responsible of the weird service messages that are written in the opposite sense.\n"
+                        .."When RTL is not allowed (🚫), everyone that writes this character (or that has it in his name) will be kicked.",
                 links = "*Admins: links*\n\n"
                         .."`/setlink [link|'no']` = set the group link, so it can be re-called by other admins, or unset it.\n"
                         .."`/link` = get the group link, if set by the owner.\n"
@@ -279,7 +278,7 @@
             Flag = 'Flag',
             Extra = 'Extra',
             Flood = 'Anti-flood',
-            Rtl = 'Rtl',
+            Rtl = 'RTL',
             Arab = 'Arab',
             Report = 'Report',
             Admin_mode = 'Admin mode',
