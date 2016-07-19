@@ -113,6 +113,26 @@ local action = function(msg, blocks, ln)
             api.sendKeyboard(msg.from.id, message, keyboard, true)
             return
         end
+        --NEW CODE
+        if is_mod(msg) then
+            keyboard = {
+                {
+                    { text = '🔰 User commands', callback_data = '!user' },
+                    { text = '🔰 Admin commands', callback_data = '!mod' },
+                },
+                {
+                    { text = "Done", callback_data = "close" }
+                },
+            }
+            local message = 'Choose the *role* to see the available commands:'
+        else
+            keyboard = make_keyboard(false, "user")
+            message = lang[ln].help.all
+        end
+        local res = api.sendKeyboard(msg.from.id, message, keyboard, true)
+        --OLD CODE, UNCOMMENT IF NEW DOESN'T WORK.
+        -- If new works, please delete the old code and the comment at line .
+        --[[
         keyboard = {
             {
                 { text = '🔰 User commands', callback_data = '!user' },
@@ -123,6 +143,7 @@ local action = function(msg, blocks, ln)
             },
         }
         local res = api.sendKeyboard(msg.from.id, 'Choose the *role* to see the available commands:', keyboard, true)
+        --]]
         if res then
             api.sendMessage(msg.chat.id, lang[ln].help.group_success, true)
         else
