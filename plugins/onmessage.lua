@@ -183,10 +183,12 @@ pre_process = function(msg, ln)
 			print(msg.from.id..', '..msg.from.username..' banned for mafia spam in '..msg.chat.id)
 		end
 		
-		if config.admin.GlobalBanList[user] then
+		local isBanned = db:hget('globalBan:'..msg.from.id, 'banned')
+		if isBanned == '1' then
 			api.banUser(msg.chat.id, msg.from.id, msg.normal_group, ln)
-			cross.addBanList(msg.chat.id, msg.from.id, msg.from.username, 'GlobalBan for Child Porn')
-			api.sendMessage(msg.chat.id, msg.from.first_name..' has been automatically banned as he sent child porn to one of the groups this bot is in or heavily stalked someone in one of the groups this bot is in. To appeal this ban please join @werewolfsupport')
+			local moti = db:hget('globalBan:'..msg.from.id, 'motivation')
+			cross.addBanList(msg.chat.id, msg.from.id, msg.from.username, 'Global banned for: '..moti)
+			api.sendMessage(msg.chat.id, msg.from.first_name..' has been automatically banned due as he has a history of: '..moti..'. To appeal this ban please join @werewolfsupport')
 			print(msg.from.id..', '..msg.from.username..' Global banned '..msg.chat.id)
 		end
 		

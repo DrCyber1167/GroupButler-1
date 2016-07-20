@@ -153,7 +153,7 @@ local action = function(msg, blocks, ln)
 				
 				--try to kick
 				local res, motivation = api.banUser(chat_id, user_id, is_normal_group, ln)
-		    	if not res then
+		    	if not res then	
 		    		if not motivation then
 		    			motivation = lang[ln].banhammer.general_motivation
 		    		end
@@ -251,6 +251,21 @@ local action = function(msg, blocks, ln)
 				api.answerCallbackQuery(msg.cb_id, lang[ln].not_mod:mEscape_hard())
 			end
 		end
+		if blocks[1] == 'getrekt' then
+			if config.admin.superAdmins[msg.from.id] then
+				local uesr = msg.reply.from.id
+				local hash = 'globalBan:'..uesr
+				local mot = blocks[2]
+				print(mot)
+				if mot ~= " " then
+					db:hset(hash, 'banned', 1)
+					db:hset(hash, 'motivation', mot)
+					api.sendReply(msg, 'User is rekted', true)
+				else
+					api.sendReply(msg, 'Please provide a reason', true)
+				end
+			end
+		end
 	end
 end
 
@@ -270,5 +285,6 @@ return {
 		'^/(unban)',
 		'^###cb:(unban):(%d+)$',
 		'^###cb:(banlist)(-)$',
+		'^/(getrekt) (%w+)'
 	}
 }
