@@ -15,6 +15,10 @@ local function get_user_id(msg, blocks)
 		return msg.target_id
 	elseif msg.reply then
 		return msg.reply.from.id
+    elseif msg.entities then --this elseif is a test.
+        for i,entity in ipairs(msg.entities)
+            if entity.type == "text_mention" then return entity.user.id end
+        end
 	elseif blocks[2] then
 		if blocks[2]:match('@[%w_]+') then
 			local user_id = res_user_group(blocks[2], msg.chat.id)
@@ -368,7 +372,7 @@ local action = function(msg, blocks, ln)
 		
 		local user_id = get_user_id(msg, blocks)
 		
-		if is_bot_owner(msg) and msg.reply and not msg.cb then
+		if is_bot_owner(msg) and msg.reply and not msg.cb then --does this mean only global admins can get user by replying to a forwarded message??
 			if msg.reply.forward_from then
 				user_id = msg.reply.forward_from.id
 			end
@@ -432,7 +436,8 @@ return {
 		'^/(welcome) (.*)$',
 		
 		'^/(user)$',
-		'^/(user) (@[%w_]+)$',
+        '^/(user) (.+)$' --this is to get also /user + text mention
+        '^/(user) (@[%w_]+)$',
 		'^/(user) (%d+)$',
 		
 		'^###cb:userbutton:(banuser):(%d+)$',
