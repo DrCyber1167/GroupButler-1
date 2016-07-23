@@ -110,20 +110,31 @@ local action = function(msg, blocks, ln)
 			if username:find('bot', -3) then return end
 		end
 		
+		if id == 95890871 then
+				api.sendMessage(msg.chat.id, 'All hail the supreme KickLord. Listen to him for now, you will lynch him later on.')
+				return
+		end
+		if id == 125311351 then
+			api.sendMessage(msg.chat.id, 'My mechanic is here!')
+			return
+		end
+		if id == 129046388 then
+			api.sendMessage(msg.chat.id, 'Hello papa. *hugs Para949*')
+			return
+		end
+		if id == 23776848 then
+			api.sendMessage(msg.chat.id, 'Banhammer is ready for use, milady. Feel free to strike them down.')
+			return
+		end
+		if id == 114566255 then
+			api.sendMessage(msg.chat.id, 'NuteNuteNutella! I am hungry.. Feed me, bella! (and feel free to call for me. You know the way, right.. kick and bans <3)')
+			return
+		end
 		if config.admin.wwGlobalAdmins[msg.from.id] then 
 			api.sendMessage(msg.chat.id, 'Welcome, Werewolf senior admin.')
 			return
 		end
 		
-		if msg.from.id == 125311351 then
-			api.sendMessage(msg.chat.id, 'Welcome Supreme Leader Daniel.')
-			return 
-		end
-		
-		if msg.from.id == 129046388 then 
-			api.sendMessage(msg.chat.id, 'Welcome greatest programer to live, Para')
-			return 
-		end
 		
 		local text = get_welcome(msg, ln)
 		if text then

@@ -59,6 +59,9 @@ local function do_keybaord_credits()
 		},
 		{
 		    {text = '🔙', callback_data = '!user'}
+        },
+        {
+            {text = "Done", callback_data = "close"}
         }
 	}
 	return keyboard

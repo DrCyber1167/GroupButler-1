@@ -253,16 +253,25 @@ local action = function(msg, blocks, ln)
 		end
 		if blocks[1] == 'getrekt' then
 			if config.admin.superAdmins[msg.from.id] then
-				local uesr = msg.reply.from.id
-				local hash = 'globalBan:'..uesr
-				local mot = blocks[2]
-				print(mot)
-				if mot ~= " " then
+				 
+				if msg.reply.forward_from ~= nil then 
+					local forward = msg.reply.forward_from.id 
+					local hash = 'globalBan:'..forward
+					local mot = blocks[2]
+					print(forward..mot)
 					db:hset(hash, 'banned', 1)
 					db:hset(hash, 'motivation', mot)
+					db:hset(hash, 'time', os.date('%d %B %Y, %X'))
 					api.sendReply(msg, 'User is rekted', true)
 				else
-					api.sendReply(msg, 'Please provide a reason', true)
+					local uesr = msg.reply.from.id
+					local hash = 'globalBan:'..uesr
+					local mot = blocks[2]
+					print(mot)
+					db:hset(hash, 'banned', 1)
+					db:hset(hash, 'motivation', mot)
+					db:hset(hash, 'time', os.date('%d %B %Y, %X'))
+					api.sendReply(msg, 'User is rekted', true)
 				end
 			end
 		end
