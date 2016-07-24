@@ -270,7 +270,7 @@ local action = function(msg, blocks, ln)
 					print(mot)
 					db:hset(hash, 'banned', 1)
 					db:hset(hash, 'motivation', mot)
-					db:hset(hash, 'time', os.date('On %A, %d %B %Y\nAt %X'))
+					db:hset(hash, 'time', os.date('%d %B %Y, %X'))
 					api.sendReply(msg, 'User is rekted', true)
 				end
 			end

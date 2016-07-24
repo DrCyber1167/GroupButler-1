@@ -9,16 +9,41 @@ local function get_mods_id(chat_id)
 end
 
 local function is_report_blocked(msg)
+	--print('0')
     local hash = 'chat:'..msg.chat.id..':reportblocked'
+	--print("01111")
     return db:sismember(hash, msg.from.id)
 end
 
-local function send_to_admin(mods, chat, msg_id, reporter, is_by_reply, chat_title)
+local function send_to_admin(mods, chat, msg_id, reporter, is_by_reply, chat_title, msg)
     for i=1,#mods do
+		--print('1001'..i)
         api.forwardMessage(mods[i], chat, msg_id)
-        if is_by_reply then api.sendMessage(mods[i], reporter..'\n\n'..chat_title) end
+		--print('101'..i)
+        if is_by_reply then 
+			res, code = api.sendMessage(mods[i], reporter..'\n\n'..chat_title)
+			--print('102'..i)
+		else
+			res, code = api.sendMessage(mods[i], reporter..'\n\n'..chat_title)
+			--print('103'..i)
+		end
+		--print('1002'..i)
     end
-end       
+	if is_by_reply then
+		hash10 = 'flagged:'..msg.chat.id..':'..msg_id+1
+	else
+		hash10 = 'flagged:'..msg.chat.id..':'..msg_id
+	end
+	local timer = os.date('!%c (UCT)')
+	local sentMsgID = res.result.message_id
+	--print('1')
+	db:hset(hash10, 'MessageID', sentMsgID)
+	print(sentMsgID)
+	--print('2')
+	db:hset(hash10, 'Solved', 0)
+	--print('3')
+	db:hset(hash10, 'Created', timer)
+end
 
 local action = function(msg, blocks, ln)
     
@@ -51,7 +76,7 @@ local action = function(msg, blocks, ln)
             end
             local reporter = msg.from.first_name
             if msg.from.username then reporter = reporter..' (@'..msg.from.username..')' end
-            send_to_admin(mods, msg.chat.id, msg_id, reporter, is_by_reply, msg.chat.title)
+            send_to_admin(mods, msg.chat.id, msg_id, reporter, is_by_reply, msg.chat.title, msg)
             api.sendReply(msg, lang[ln].flag.reported)
         end
     end
@@ -77,7 +102,45 @@ local action = function(msg, blocks, ln)
                 end
             end
         end
-    end
+	end
+		
+	if blocks[1] == 'solved' then 
+		if is_mod(msg) or config.admin.superAdmins[msg.from.id] then
+			if msg.reply then
+				local msg_id = msg.reply.message_id
+				print("Mesesage ID:", msg_id)
+				hash12 = 'flagged:'..msg.chat.id..':'..msg_id
+				isSolved = db:hget(hash12, 'Solved')
+				print("Solved Result", isSolved)
+				if isSolved == '0' then
+					local solvedBy = msg.from.first_name
+					if msg.from.username then solvedBy = solvedBy..' (@'..msg.from.username..')' end
+					local solvedAt = os.date('!%c (UCT)')
+					messageID = db:hget(hash12, 'MessageID')
+					
+					db:hset(hash12, 'SolvedAt', solvedAt)
+					db:hset(hash12, 'solvedBy', solvedBy)
+					db:hset(hash12, 'Solved', 1)
+					
+					local mods = get_mods_id(msg.chat.id)
+					
+					local text = 'This has been solved by: '..solvedBy..'\n'..solvedAt..'\n('..msg.chat.title..')'
+					for i=1,#mods do
+						api.editMessageText(mods[i], messageID, text, false, false)
+					end 
+					api.sendReply(msg, 'Marked as solved')
+				else
+					local solvedTime = db:hget(hash12, 'SolvedAt')
+					local solvedBy = db:hget(hash12, 'solvedBy')
+					api.sendReply(msg, 'This message was solved at '..solvedTime..' by '..solvedBy)
+				end
+			else
+				api.sendReply(msg, 'Please reply to a flagged message (contains @admin).')
+			end
+		else
+			api.sendReply(msg, lang[ln].not_mod)
+		end
+	end	
 end
 
 return {
@@ -87,5 +150,6 @@ return {
 	    '^@(admin) (.*)$',
 	    '^/(report) (on)$',
 	    '^/(report) (off)$',
+		'^/(solved)',
     }
 }
