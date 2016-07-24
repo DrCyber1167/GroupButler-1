@@ -7,6 +7,19 @@ if not config.bot_api_key then
 	error('You did not set your bot token in config.lua!')
 end
 
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
 local function sendRequest(url)
 	--print(url)
 	local dat, code = HTTPS.request(url)
@@ -203,13 +216,16 @@ local function kickUser(chat_id, user_id, ln)-- no_msg: don't send the error mes
 			print('out of the while')
 		end
 		print('It took: '..count..' times to kick')
+		print("Returned: ", dump(res), " Code: ", code)
 		return res
 	else
 		print('inside else statment because result failed')
+		print("Returned: ", dump(res), " Code: ", code)
 		local motivation = api.code2text(code, ln)
 		return res, motivation
 	end
 	print('kicked finished')
+	
 end
 
 local function unbanUser(chat_id, user_id, is_normal_group)
@@ -335,7 +351,8 @@ local function sendMessage(chat_id, text, use_markdown, reply_to_message_id, sen
 	end
 	
 	local res, code = sendRequest(url)
-	
+	--print("MsgDump: ", dump(res))
+	--print(res.result.message_id)
 	if not res and code then --if the request failed and a code is returned (not 403 and 429)
 		if code ~= 403 and code ~= 429 and code ~= 110 and code ~= 111 and code ~= 116 and code ~= 131 then
 			save_log('send_msg', code..'\n'..text)
