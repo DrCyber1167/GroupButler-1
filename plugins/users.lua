@@ -3,8 +3,8 @@ local function do_keybaord_credits()
     keyboard.inline_keyboard = {
     	{
     		{text = 'Channel', url = 'https://telegram.me/'..config.channel:gsub('@', '')},
-    		{text = 'GitHub', url = 'https://github.com/BladeZero/GroupButler'},
-    		{text = 'Get Support', url = 'https://telegram.me/werewolfsupport'},
+    		{text = 'GitHub', url = 'https://github.com/RememberTheAir/GroupButler'},
+    		{text = 'Rate me!', url = 'https://telegram.me/storebot?start='..bot.username},
 		}
 	}
 	return keyboard
@@ -15,10 +15,6 @@ local function get_user_id(msg, blocks)
 		return msg.target_id
 	elseif msg.reply then
 		return msg.reply.from.id
-    elseif msg.entities then --this elseif is a test.
-        for i,entity in ipairs(msg.entities)
-            if entity.type == "text_mention" then return entity.user.id end
-        end
 	elseif blocks[2] then
 		if blocks[2]:match('@[%w_]+') then
 			local user_id = res_user_group(blocks[2], msg.chat.id)
@@ -46,9 +42,9 @@ end
 local function get_ban_info(user_id, chat_id, ln)
 	local hash = 'ban:'..user_id
 	local ban_info = db:hgetall(hash)
-	--if not next(ban_info) then
-	--	return lang[ln].getban.nothing
-	--else
+	if not next(ban_info) then
+		return lang[ln].getban.nothing
+	else
 		local ban_index = {
 			['kick'] = lang[ln].getban.kick,
 			['ban'] = lang[ln].getban.ban,
@@ -63,15 +59,15 @@ local function get_ban_info(user_id, chat_id, ln)
 		for type,n in pairs(ban_info) do
 			text = text..'`'..ban_index[type]..'`'..'*'..n..'*\n'
 		end
-		--if text == '' then
-		--	return lang[ln].getban.nothing
-		--else
+		if text == '' then
+			return lang[ln].getban.nothing
+		else
 			local warns = (db:hget('chat:'..chat_id..':warns', user_id)) or 0
 			local media_warns = (db:hget('chat:'..chat_id..':mediawarn', user_id)) or 0
 			text = text..'\n`Warns`: '..warns..'\n`Media warns`: '..media_warns
 			return text
-		--end
-	--end
+		end
+	end
 end
 
 local function do_keyboard_userinfo(user_id, ln)
@@ -351,14 +347,10 @@ local action = function(msg, blocks, ln)
 			api.sendReply(msg, text)
 		end
 	end
-	if blocks[1] == 'support' then
+	if blocks[1] == 'group' then
+		if msg.chat.type ~= 'private' then return end
 		if config.help_group and config.help_group ~= '' then
-			if msg.reply then 
-			 	msgToReplyTo = msg.reply.message_id
-			else 
-				msgToReplyTo = msg.message_id
-			end
-			api.sendMessage(msg.chat.id, '[Click here to get help from the support group]('..config.help_group..')', true, msgToReplyTo)
+			api.sendMessage(msg.chat.id, '[Click/tap here to join :)]('..config.help_group..')', true)
 		end
 	end
 	if blocks[1] == 'user' then
@@ -372,7 +364,7 @@ local action = function(msg, blocks, ln)
 		
 		local user_id = get_user_id(msg, blocks)
 		
-		if is_bot_owner(msg) and msg.reply and not msg.cb then --does this mean only global admins can get user by replying to a forwarded message??
+		if is_bot_owner(msg) and msg.reply and not msg.cb then
 			if msg.reply.forward_from then
 				user_id = msg.reply.forward_from.id
 			end
@@ -432,12 +424,11 @@ return {
 		'^/(export)(ban)$',
 		'^/(export)(save)$',
 		'^/(importban)$',
-		'^/(support)$',
+		'^/(group)$',
 		'^/(welcome) (.*)$',
 		
 		'^/(user)$',
-        '^/(user) (.+)$' --this is to get also /user + text mention
-        '^/(user) (@[%w_]+)$',
+		'^/(user) (@[%w_]+)$',
 		'^/(user) (%d+)$',
 		
 		'^###cb:userbutton:(banuser):(%d+)$',
