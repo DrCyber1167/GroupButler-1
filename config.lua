@@ -1,18 +1,18 @@
 return {
-	bot_api_key = '',
+	bot_api_key = 963658853:AAFZ-QKx2XPU1FGXvHTQ4YnbBeyujwn2X34,
 	version = '3.1', -- /aupdate for v3.1
 	testing_mode = false,
 	admin = {
-		owner = '',
+		owner = 430129831,
 		admins = {
-
+			[430129831] = true,
     		},
 		superAdmins = {
-
+			[430129831] = true,
 		},
 		
 		wwGlobalAdmins = {
-
+			[430129831] = true,
 		},
 		
 		GlobalBanList = {
@@ -24,9 +24,9 @@ return {
 
 		}
 	},
-	log_chat = -1001056443835,
-	channel = '@werewolfdev',
-	help_group = 'https://telegram.me/werewolfsupport', --group link, not username!
+	log_chat = -1001342089039,
+	channel = '@Kazifier',
+	help_group = 'https://telegram.me/Kazifier', --group link, not username!
 	languages = 'languages.lua',
 	plugins = {
 		'onmessage.lua', --THIS HAVE TO BE THE FIRST: IF AN USER IS SPAMMING/IS BLOCKED, THE BOT WON'T GO THROUGH PLUGINS
