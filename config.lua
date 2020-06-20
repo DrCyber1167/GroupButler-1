@@ -12,7 +12,7 @@ return {
 		},
 		
 		wwGlobalAdmins = {
-			[430129831] = true,
+
 		},
 		
 		GlobalBanList = {
